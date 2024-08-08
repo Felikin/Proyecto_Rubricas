@@ -1,29 +1,28 @@
-from langchain_openai import ChatOpenAI
-from dotenv import load_dotenv
-from prompts.prompts import *
+import time
+from utils import extract_audio, split_transcript_audio, model_execution
+import json
 import os
-import pandas as pd
 
 
-load_dotenv()
+def main():
 
-# Definición del modelo
-llm = ChatOpenAI(
-    model="gpt-4o-mini-2024-07-18",
-    api_key=os.environ.get("OPENAI_API_KEY"),
-    temperature=0
-)
+    video_path = "Juan Sebastian Lozano 1.mp4"
+    extract_audio(video_path)
 
-# Cargar transcripción de la clase
-archivo = "Juan.txt"
-with open(archivo, "r", encoding="utf-8") as file:
-    transcripcion = file.read()
+    audio_path = "audio_from_video.mp3"
+    transcripcion = split_transcript_audio(audio_path)
 
-# Definición de la cadena de ejecución
-chain_rubricas = prompt_rubricas | llm | output_parser
+    with open("transcription.txt", "w", encoding="utf-8") as file:
+        file.write(transcripcion)
 
-# Ejecución del prompt
-results = chain_rubricas.invoke(input={"transcripcion": transcripcion})
+    rubricas = model_execution(transcripcion)
+    with open("rubricas.txt", "w", encoding="utf-8") as file:
+        file.write(json.dumps(rubricas, ensure_ascii=False))
 
-# Visualización de resultados
-print(results["rubricas"])
+    os.remove(audio_path)
+
+
+if __name__ == "__main__":
+    start_time = time.time()
+    main()
+    print(f"{time.time() - start_time} segundos")

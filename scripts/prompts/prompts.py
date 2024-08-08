@@ -1,8 +1,6 @@
 from langchain.prompts import PromptTemplate
-from langchain_core.output_parsers import StrOutputParser
-from langchain_core.output_parsers import CommaSeparatedListOutputParser, JsonOutputParser
-from langchain_core.output_parsers.list import NumberedListOutputParser
-from prompts.object_models import Rubrica, Rubricas
+from langchain_core.output_parsers import  JsonOutputParser
+from prompts.object_models import Rubricas
 
 
 # Prompt para bajas económicas 
@@ -29,9 +27,8 @@ Determina si el docente cumplió con cada una de las siguientes rúbricas:
                             
 Para cada una de las rúbricas debes crear un JSON con cuartro llaves:
 - "Rúbrica": <Nombre de la rúbrica evaluada>.
-- "Cumple": <Sí o No dependiendo de si el docente cumple con la rúbrica>.
-- "Justificación": <Razón por la que crees que el docente cumple con la rúbrica>.
-- "Fragmento": <Fragmento de la clase que sustente tu respuesta>.
+- "Cumple": <True o False dependiendo de si el docente cumple con la rúbrica>.
+- "Observación": <Razón por la que crees que el docente cumple con la rúbrica>.
 
 
 transcrpición: 
