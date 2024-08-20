@@ -7,7 +7,7 @@ from pydub import AudioSegment
 import math
 from tqdm import tqdm
 import os
-from moviepy.editor import VideoFileClip # type: ignore
+from moviepy.editor import VideoFileClip
 
 
 load_dotenv()
@@ -24,9 +24,9 @@ def extract_audio(video_path: str) -> None:
     video = VideoFileClip(video_file)
     audio = video.audio
 
-    audio.write_audiofile("audio_from_video.mp3")
+    audio.write_audiofile("audio_from_video.mp3") # type: ignore
 
-    audio.close()
+    audio.close() # type: ignore
     video.close()
 
 
@@ -63,7 +63,7 @@ def model_execution(transcripcion: str) -> List[dict]:
     
     llm = ChatOpenAI(
         model="gpt-4o-mini-2024-07-18",
-        api_key=openai_api_key,
+        api_key=openai_api_key, # type:ignore
         temperature=0
     )
     chain_rubricas = prompt_rubricas | llm | output_parser
@@ -74,11 +74,11 @@ def model_execution(transcripcion: str) -> List[dict]:
 
 def split_transcript_audio(audio_path: str) -> str:
     """
-    Recibe un string con la ruta del mp3 a transcribir y devuelve la transcripción de dicho mp3.
+    Recibe un string con la ruta del mp3/mp4 a transcribir y devuelve la transcripción de dicho archivo.
     Args:
-        audio_path: Ruta del archivo mp3 a transcribir.
+        audio_path: Ruta del archivo mp3/mp4 a transcribir.
     Returns:
-        str: Transcripción del archivo mp3.
+        str: Transcripción del archivo.
     """
     audio = AudioSegment.from_mp3(audio_path)
     diez_minutos = 10 * 60 * 1000 # Duración de los sub audios para su posterior transcripción

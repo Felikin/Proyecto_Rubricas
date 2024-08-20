@@ -1,28 +1,36 @@
-import time
-from utils import extract_audio, split_transcript_audio, model_execution
+from fastapi import FastAPI, File, UploadFile
+from utils import split_transcript_audio, model_execution
 import json
 import os
 
-
-def main():
-
-    video_path = "Juan Sebastian Lozano 1.mp4"
-    extract_audio(video_path)
-
-    audio_path = "audio_from_video.mp3"
-    transcripcion = split_transcript_audio(audio_path)
-
-    with open("transcription.txt", "w", encoding="utf-8") as file:
-        file.write(transcripcion)
-
-    rubricas = model_execution(transcripcion)
-    with open("rubricas.txt", "w", encoding="utf-8") as file:
-        file.write(json.dumps(rubricas, ensure_ascii=False))
-
-    os.remove(audio_path)
+app = FastAPI()
 
 
-if __name__ == "__main__":
-    start_time = time.time()
-    main()
-    print(f"{time.time() - start_time} segundos")
+@app.get("/")
+def root():
+    return {"message": "Hello World :D!"}
+
+
+@app.post("/process_video")
+async def process_audio(file: UploadFile = File(...)):
+    
+    # Escritura temporal del  video en el servidor
+    temp_video_path = f"from_fastapi_{file.filename}"
+    with open(temp_video_path, "wb") as f:
+        f.write(await file.read())
+
+    # Generación de la transcripción de la clase
+    transcription = split_transcript_audio(temp_video_path)
+
+    with open("fastapi_transcripcion.txt", "w") as transcription_file:
+        transcription_file.write(transcription)
+    
+    # Evaluación de las rúbricas
+    rubricas = model_execution(transcription)
+    with open("fastapi_rubricas.txt", "w") as rubricas_file:
+        rubricas_file.write(json.dumps(rubricas, ensure_ascii=False))
+
+    # Eliminación del video del servidor
+    os.remove(temp_video_path)
+
+    return {"Rúbricas": rubricas}
