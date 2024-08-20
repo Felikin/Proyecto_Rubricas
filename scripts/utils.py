@@ -14,7 +14,7 @@ load_dotenv()
 openai_api_key = os.environ.get("OPENAI_API_KEY")
 
 
-def extract_audio(video_path: str) -> None:
+def extract_audio(video_path: str) -> str:
     """
     Recibe un archivo mp4 y guarda el archivo de audio en formato mp3.
     Args:
@@ -24,10 +24,14 @@ def extract_audio(video_path: str) -> None:
     video = VideoFileClip(video_file)
     audio = video.audio
 
-    audio.write_audiofile("audio_from_video.mp3") # type: ignore
+    audio_file_name = "audio_from_video.mp3"
+
+    audio.write_audiofile(audio_file_name) # type: ignore
 
     audio.close() # type: ignore
     video.close()
+
+    return audio_file_name
 
 
 def transcript_audio(audio_path: str) -> str:
@@ -72,14 +76,17 @@ def model_execution(transcripcion: str) -> List[dict]:
     return results["rubricas"]
 
 
-def split_transcript_audio(audio_path: str) -> str:
+def split_transcript_audio(video_path: str) -> str:
     """
-    Recibe un string con la ruta del mp3/mp4 a transcribir y devuelve la transcripción de dicho archivo.
+    Recibe un string con la ruta del mp4 a transcribir y devuelve la transcripción de dicho archivo.
     Args:
-        audio_path: Ruta del archivo mp3/mp4 a transcribir.
+        audio_path: Ruta del archivo mp4 a transcribir.
     Returns:
         str: Transcripción del archivo.
     """
+
+    audio_path = extract_audio(video_path)
+
     audio = AudioSegment.from_mp3(audio_path)
     diez_minutos = 10 * 60 * 1000 # Duración de los sub audios para su posterior transcripción
     transcripciones = []
@@ -98,6 +105,7 @@ def split_transcript_audio(audio_path: str) -> str:
     transcripcion = " ".join(transcripciones)
     try:
         os.remove(sub_audio_name)
+        os.remove(audio_path)
     except Exception as e:
         print(e, "\n")
 
