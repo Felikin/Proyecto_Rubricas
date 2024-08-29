@@ -18,4 +18,10 @@ def print_slides_count(slides: int) -> None:
     Args:
     slides (int): Número de slides contadas.
     """
-    print(f"el número de diapositivas aproximado fue de {slides}") 
+    print(f"el número de diapositivas aproximado fue de {slides}")
+
+def print_gpt(results: dict) -> None:
+    print("Resultados del Análisis:")
+    print(f"¿Profesor en cámara?: {'Sí' if results['Profesor_en_Cámara'] else 'No'}")
+    print(f"¿Diapositivas presentes?: {'Sí' if results['Diapositivas_presentes'] else 'No'}")
+    print(f"Moda de cantidad de texto en diapositivas: {results['Moda_de_Texto']}")
