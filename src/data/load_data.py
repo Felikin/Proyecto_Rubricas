@@ -3,6 +3,9 @@ import cv2
 from ultralytics import YOLO
 from moviepy.editor import VideoFileClip
 from openai import OpenAI
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 def load_video(video_path: str) -> cv2.VideoCapture:

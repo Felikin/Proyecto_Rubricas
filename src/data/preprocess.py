@@ -15,7 +15,10 @@ def encode_image_to_base64(frame):
     Returns:
         str: Imagen codificada en base64.
     """
-    _, buffer = cv2.imencode(".jpg", frame)
+    gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    smgframe = cv2.resize(gray_frame, (640,480)) 
+
+    _, buffer = cv2.imencode(".jpg", smgframe)
     return base64.b64encode(buffer).decode('utf-8')
 
 

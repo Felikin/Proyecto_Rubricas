@@ -1,4 +1,5 @@
 import os
+import json
 from openai import OpenAI
 from dotenv import load_dotenv
 load_dotenv()
@@ -51,6 +52,5 @@ def send_frame_to_gpt(frame, client):
         "messages": [PROMPT_MESSAGES],
         "max_tokens": 500,
     }
-
     result = client.chat.completions.create(**params)
     return result.choices[0].message.content
