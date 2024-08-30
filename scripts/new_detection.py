@@ -5,11 +5,15 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 import time
 import cv2
+import base64
+import matplotlib.pyplot as plt
 from src.data.load_data import load_video
 from src.data.preprocess import encode_image_to_base64
-from src.models.gpt_model import initialize_gpt_client, send_frame_to_gpt
+from src.data.load_data import initialize_gpt_client
+from src.models.gpt_model import send_frame_to_gpt
 from src.visualization.visualize_detections import print_gpt
 from src.utils.video_utils import process_gpt_outputs
+from tqdm import tqdm
 
 
 
@@ -27,7 +31,7 @@ def main(video_path, interval_seconds):
 
     # Procesar cada frame seleccionado
     model_output = []
-    for frame_index in frames_to_capture:
+    for frame_index in tqdm(frames_to_capture, desc = "Analizando video"):
         video.set(cv2.CAP_PROP_POS_FRAMES, frame_index)
         ret, frame = video.read()
         if not ret:
@@ -35,7 +39,8 @@ def main(video_path, interval_seconds):
         base64_image = encode_image_to_base64(frame)
         generated_text = send_frame_to_gpt(base64_image, client)
         model_output.append(generated_text)
-        time.sleep(1)
+        with open(f"data/generated/{frame_index}.png", "wb") as fh:
+             fh.write(base64.decodebytes(bytes(base64_image, "utf-8")))
     video.release()
     
     results = process_gpt_outputs(model_output)
@@ -43,6 +48,5 @@ def main(video_path, interval_seconds):
 
 if __name__ == "__main__":
         video_path = "data/raw/Juan Sebastian Lozano.mp4"
-        interval_seconds = 5
+        interval_seconds = 60
         main(video_path, interval_seconds)
-
