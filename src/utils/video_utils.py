@@ -7,7 +7,10 @@ from tqdm import tqdm
 def clean_gpt_output(output: str) -> dict:
     """Limpia el string JSON devuelto por GPT y lo convierte en un diccionario."""
     json_str = re.sub("```|json", "", output)
-    return json.loads(json_str)
+    try:
+        return json.loads(json_str)
+    except: 
+        return None
 
 def process_gpt_outputs(gpt_outputs: dict) -> list:
     """
