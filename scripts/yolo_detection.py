@@ -3,7 +3,7 @@ import sys
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from src.models.video_model import process_video
+from src.models.yolo_model import process_video
 from src.visualization.visualize_detections import print_detection_result, print_slides_count
 
 
