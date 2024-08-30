@@ -28,4 +28,4 @@ def print_gpt(results: dict) -> None:
     print(f"¿Profesor en cámara?: {'Sí' if results['Profesor_en_Cámara'] else 'No'}")
     print(f"¿Diapositivas presentes?: {results['Diapositivas_presentes']}")
     print(f"Cantidad de texto en diapositivas: {results['Moda_de_Texto']}")
-    print(f"¿Contiene gráficos las diapositivas?: {results['Moda_de_Texto']}")
+    print(f"¿Contiene gráficos las diapositivas?: {'Sí' if results['Moda_de_Texto'] else 'No'}")
