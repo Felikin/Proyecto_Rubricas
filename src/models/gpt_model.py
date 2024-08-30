@@ -10,6 +10,16 @@ from src.prompts.prompt_templates import generate_prompt_message
 load_dotenv()
 
 def process_video(video_path: str, interval_seconds: int) -> Dict:
+    """
+    Procesa un video para enviar frames a gpt y analizar contenido.
+
+    Args:
+    video_path (str): Ruta al archivo de video.
+    interval_seconds (int): Proporcion de tiempo a saltar para la detección.
+
+    Returns:
+    dict: Detecciones en frames enviados.
+    """
     # Cargar el video
     video = load_video(video_path)
     fps = int(video.get(cv2.CAP_PROP_FPS))
@@ -24,74 +34,17 @@ def process_video(video_path: str, interval_seconds: int) -> Dict:
             break
         base64_image = encode_image_to_base64(frame)
         prompt = generate_prompt_message(base64_image)
-        #generated_text = send_frame_to_gpt(base64_image)
         generated_text = send_gpt_request(prompt)
-        print(generated_text)
         model_output.append(generated_text)
-        with open(f"data/generated/{frame_index}.png", "wb") as fh:
-             fh.write(base64.decodebytes(bytes(base64_image, "utf-8")))
     video.release()
-    results = process_gpt_outputs(model_output)
     cv2.destroyAllWindows()
+    results = process_gpt_outputs(model_output)
 
     return results
 
-
-# def send_frame_to_gpt(frame):
-#     """Envía un frame de video a GPT para análisis y obtiene el resultado.
-
-#     Args:
-#         frame (str): Frame codificado en base64.
-#         client (OpenAI): Cliente de OpenAI.
-
-#     Returns:
-#         dict: Resultado del análisis del frame.
-#     """
-#     client = initialize_gpt_client()
-
-#     prompt_message = """
-#         Por favor, analiza la siguiente imagen codificada en base64 proveniente de un video de una clase y 
-#         1. Presencia del Profesor: Indica si el profesor aparece en cámara en este frame. Devuelve true si aparece, de lo contrario, false.\n
-#         2. Conteo de Diapositivas: Indica si en este frame se muestra una diapositiva. Si hay una diapositiva presente, 
-#         proporciona el contenido textual principal de la diapositiva.\n
-#         3. Contenido de la Diapositiva:\n
-#            - Gráficos: Indica si en la diapositiva aparece algún gráfico o imagen visual. Devuelve true si hay gráficos presentes,
-#         de lo contrario, false.\n
-#            - Cantidad de Texto: Evalúa la cantidad de texto presente en la diapositiva. Clasifica la cantidad de texto en
-#         baja, media o alta según la densidad textual.\n\n
-        
-#         Proporciona la salida en un diccionario de la siguiente forma:
-#         "Camara": "<True/False>",
-#         "Slide": "<True/False>",
-#         "Contenido": {
-#             "texto": "<contenido textual principal>",
-#             "graficos": "<True/False>",
-#             "Cantidad de texto": "<baja/media/alta>"
-#           }
-
-    
-#         No hagas NINGÚN (```, json) comentario adicional, ni añadas texto diferente (```, json) al formato de salida, NADA DIFERENTE a la salida. Si no puedes analizar la imagen devuelve todo negativo. 
-#     """
-
-#     PROMPT_MESSAGES = {
-#         "role": "user",
-#         "content": [
-#             prompt_message,
-#             {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{frame}"}}
-#         ]
-#     }
-
-#     params = {
-#         "model": "gpt-4o-2024-08-06",
-#         "messages": [PROMPT_MESSAGES],
-#         "max_tokens": 500,
-#     }
-#     result = client.chat.completions.create(**params)
-#     return result.choices[0].message.content
-
-
-def send_gpt_request(prompt_message):
-    """Envía una solicitud a GPT y retorna el resultado.
+def send_gpt_request(prompt_message: dict) -> dict:
+    """
+    Envía una solicitud a GPT y retorna el resultado.
 
     Args:
         client: Cliente de OpenAI.

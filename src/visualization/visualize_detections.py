@@ -1,6 +1,3 @@
-import cv2 
-import matplotlib.pyplot as plt 
-
 def print_detection_result(detections: list) -> None:
     """
     Suma el total de veces que fue detectado el rostro del profesor en el vídeo.
@@ -24,6 +21,12 @@ def print_slides_count(slides: int) -> None:
     print(f"el número de diapositivas aproximado fue de {slides}")
 
 def print_gpt(results: dict) -> None:
+    """
+    Imprime rúbricas evaluadas
+
+    Args:
+    results (dict): Resultados de las requests realizadas a gpt
+    """
     print("Resultados del Análisis:")
     print(f"¿Profesor en cámara?: {'Sí' if results['Profesor_en_Cámara'] else 'No'}")
     print(f"¿Diapositivas presentes?: {results['Diapositivas_presentes']}")

@@ -45,7 +45,7 @@ def extract_audio(video_path: str) -> str:
     """
     video = VideoFileClip(video_path)
     audio = video.audio
-    audio_file_name = "audio_from_video.mp3"
+    audio_file_name = "data/generated/audio_from_video.mp3"
     audio.write_audiofile(audio_file_name) # type: ignore
     audio.close() # type: ignore
     video.close()

@@ -2,11 +2,12 @@ import os
 import cv2
 import base64
 import math
+import numpy as np
 from pydub import AudioSegment
 from tqdm import tqdm
 from src.data.load_data import extract_audio, transcript_audio, initialize_gpt_client
 
-def encode_image_to_base64(frame):
+def encode_image_to_base64(frame: np.ndarray) -> str:
     """Codifica un frame de video a formato base64.
 
     Args:
@@ -43,7 +44,7 @@ def split_transcript_audio(video_path: str) -> str:
     end = diez_minutos
     sub_audio_name = "sub_audio_aux.mp3"
 
-    for i in tqdm(range(num_fragmentos_10_min)):
+    for i in tqdm(range(num_fragmentos_10_min), desc="Realizando Transcripciones"):
         audio[start:end].export(sub_audio_name, format="mp3")
         transcripciones.append(transcript_audio(sub_audio_name, client))
         start = end

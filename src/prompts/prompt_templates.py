@@ -1,5 +1,8 @@
 
-def generate_prompt_message(frame):
+import numpy as np
+
+
+def generate_prompt_message(frame: np.ndarray) -> dict:
     """Genera el mensaje de prompt para el análisis de la imagen.
 
     Args:
