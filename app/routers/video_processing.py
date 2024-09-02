@@ -24,7 +24,7 @@ async def upload_video(file: UploadFile = File(...), interval_seconds: int = 60)
     return JSONResponse(content=rubrica_total)
 
 @router.get("/process_video/{video_name}")
-async def process_video_endpoint(video_name: str, interval_seconds: int = 1800):
+async def process_video_endpoint(video_name: str, interval_seconds: int = 60):
     video_path = f"data/raw/{video_name}"
     
     if not os.path.exists(video_path):
