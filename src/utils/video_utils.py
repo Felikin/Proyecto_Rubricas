@@ -6,8 +6,11 @@ from tqdm import tqdm
 
 def clean_gpt_output(output: str) -> dict:
     """Limpia el string JSON devuelto por GPT y lo convierte en un diccionario."""
-    json_str = re.sub("```|json", "", output)
-    return json.loads(json_str)
+    try:
+        json_str = re.sub("```|json", "", output)
+        return json.loads(json_str)
+    except:
+        return None
 
 def process_gpt_outputs(gpt_outputs: dict) -> list:
     """
@@ -32,8 +35,8 @@ def process_gpt_outputs(gpt_outputs: dict) -> list:
     text_quantities = []
 
     for output in tqdm(gpt_outputs, desc="Calculando resultados"):
-        if output is not None: 
-            output_dict = clean_gpt_output(output)
+        output_dict = clean_gpt_output(output)
+        if output_dict is not None: 
             if output_dict["Camara"] == "True":
                 professor_count += 1
             if output_dict["Slide"]:

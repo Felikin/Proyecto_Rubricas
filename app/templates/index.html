@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/style.css">
+    <title>Proceso de Videos</title>
+    <style>
+        /* Estilos para la barra de progreso */
+        #progress {
+            width: 100%;
+            background-color: #f3f3f3;
+            margin: 20px 0;
+            display: none; /* Oculta por defecto */
+        }
+        #progress-bar {
+            width: 0;
+            height: 20px;
+            background-color: #4caf50;
+            text-align: center;
+            line-height: 20px;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>Procesar Video</h1>
+    <form action="/upload-video/" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" required>
+        <button type="submit">Subir Video</button>
+    </form>
+    
+    <h2>Seleccionar Video para Procesar</h2>
+    <form id="process-form" action="/process-video/" method="post">
+        <select name="video_file" required>
+            {% for video in videos %}
+                <option value="{{ video }}">{{ video }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Procesar Video</button>
+    </form>
+    
+    <div id="progress">
+        <div id="progress-bar">0%</div>
+    </div>
+    
+    {% if rubricas %}
+    <h2>Rúbricas Calificadas</h2>
+    <table>
+        <tr>
+            <th>Nombre</th>
+            <th>Cumple</th>
+            <th>Observación</th>
+        </tr>
+        {% for rubrica in rubricas %}
+        <tr>
+            <td>{{ rubrica.nombre }}</td>
+            <td>{{ rubrica.cumple }}</td>
+            <td>{{ rubrica.observacion }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+
+    <script>
+        const processForm = document.getElementById("process-form");
+        const progressDiv = document.getElementById("progress");
+        const progressBar = document.getElementById("progress-bar");
+
+        // Conectar al WebSocket para recibir actualizaciones
+        const socket = new WebSocket(`ws://${window.location.host}/ws/progress`);
+
+        socket.onmessage = function(event) {
+            const message = event.data;
+            if (message.includes("Procesando el video")) {
+                progressDiv.style.display = "block"; // Muestra la barra de progreso
+                progressBar.style.width = "10%"; // Actualiza el progreso inicial
+                progressBar.innerText = message; // Muestra mensaje
+            } else if (message.includes("completado")) {
+                progressBar.style.width = "100%"; // Completa la barra de progreso
+                progressBar.innerText = message; // Muestra mensaje final
+            } else {
+                progressBar.innerText = message; // Muestra otros mensajes
+            }
+        };
+
+        processForm.onsubmit = function() {
+            progressBar.style.width = "0"; // Resetea la barra al enviar el formulario
+            progressBar.innerText = "0%";
+        };
+    </script>
+</body>
+</html>
