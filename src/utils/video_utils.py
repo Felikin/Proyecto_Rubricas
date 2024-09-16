@@ -50,7 +50,7 @@ def process_gpt_outputs(gpt_outputs: dict) -> list:
 #    most_common_text_quantity = mode(text_quantities)
     
     return [
-        {"nombre": "El docente prende la cámara", "cumple": professor_count > len(gpt_outputs)/2, "observacion": "Sin comentarios adicionales"},
+        {"nombre": "El docente prende la cámara", "cumple": "Cumple" if(professor_count > len(gpt_outputs)/2) else "No cumple", "observacion": "Sin comentarios adicionales"},
         {"nombre": "El número de diapositivas es acorde con el tiempo de la sesión", "cumple": slide_count, "observacion": "Sin comentarios adicionales"},
-        {"nombre": "Las diapositivas o material usado incluyen gráficas, evita el exceso de información", "cumple": graficos > len(gpt_outputs)/2, "observacion": "Sin comentarios adicionales"}
+        {"nombre": "Las diapositivas o material usado incluyen gráficas, evita el exceso de información", "cumple": "Cumple" if(graficos > len(gpt_outputs)/2) else "No cumple", "observacion": "Sin comentarios adicionales"}
         ]

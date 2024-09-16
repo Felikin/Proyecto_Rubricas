@@ -30,8 +30,8 @@ Determina si el docente cumplió con cada una de las siguientes rúbricas:
 
 Para cada una de las rúbricas debes crear un JSON con cuartro llaves:
 - "Rúbrica": <Nombre de la rúbrica evaluada>.
-- "Cumple": <True o False dependiendo de si el docente cumple con la rúbrica>.
-- "Observación": <Razón por la que crees que el docente cumple con la rúbrica>.
+- "Cumple": <Cumple o No cumple dependiendo de si el docente cumple con la rúbrica>.
+- "Observación": <Razón por la que crees que el docente cumple o no con la rúbrica>.
 
 
 transcrpición: 

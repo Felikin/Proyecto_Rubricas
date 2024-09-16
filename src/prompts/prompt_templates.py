@@ -22,11 +22,11 @@ def generate_prompt_message(frame: np.ndarray) -> dict:
         baja, media o alta según la densidad textual.\n\n
         
         Proporciona la salida en un diccionario de la siguiente forma:
-        "Camara": "<True/False>",
-        "Slide": "<True/False>",
+        "Camara": "<Cumple/No cumple>",
+        "Slide": "<Cumple/No cumple>",
         "Contenido": {
             "texto": "<contenido textual principal>",
-            "graficos": "<True/False>",
+            "graficos": "<Cumple/No cumple>",
             "Cantidad de texto": "<baja/media/alta>"
           }
 
