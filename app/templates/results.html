@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultados del Procesamiento</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+
+<body>
+<div class="table-wrapper">
+  <h2>Rúbricas Calificadas</h2>
+  <table>
+      <tr>
+          <th>Nombre</th>
+          <th>Cumple</th>
+          <th>Observación</th>
+      </tr>
+      {% for rubrica in rubricas %}
+      <tr>
+          <td>{{ rubrica.nombre }}</td>
+          <td>{{ rubrica.cumple }}</td>
+          <td>{{ rubrica.observacion }}</td>
+      </tr>
+      {% endfor %}
+  </table>
+  <a href="/">Volver a la página principal</a>
+</div>
+</body>
+</html>

@@ -3,91 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/static/style.css">
-    <title>Proceso de Videos</title>
-    <style>
-        /* Estilos para la barra de progreso */
-        #progress {
-            width: 100%;
-            background-color: #f3f3f3;
-            margin: 20px 0;
-            display: none; /* Oculta por defecto */
-        }
-        #progress-bar {
-            width: 0;
-            height: 20px;
-            background-color: #4caf50;
-            text-align: center;
-            line-height: 20px;
-            color: white;
-        }
-    </style>
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <title>Rúbricas</title>
 </head>
 <body>
-    <h1>Procesar Video</h1>
-    <form action="/upload-video/" method="post" enctype="multipart/form-data">
-        <input type="file" name="file" required>
-        <button type="submit">Subir Video</button>
-    </form>
+    <main class="grid-center">
+        <div class="container"></div>
+        <header>
+            <img src="static/images/logo/logo.svg" alt="Logo Unir" class = "logo">
+            <h1>Procesamiento de Videos</h1>
+        </header>
     
-    <h2>Seleccionar Video para Procesar</h2>
-    <form id="process-form" action="/process-video/" method="post">
-        <select name="video_file" required>
+        <section class="upload-section">
+        <form id="uploadForm" action="/upload-video/" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" id="fileInput">
+            <button type="submit">Subir Video</button>
+        </form>
+        </section>
+
+        <section class="availabre-videos">
+        <h2 id="subT-VidDisp">Videos disponibles:</h2>
+        <ul id="videoList">
             {% for video in videos %}
-                <option value="{{ video }}">{{ video }}</option>
+                <li>{{ video }}</li>
             {% endfor %}
-        </select>
-        <button type="submit">Procesar Video</button>
-    </form>
-    
-    <div id="progress">
-        <div id="progress-bar">0%</div>
-    </div>
-    
-    {% if rubricas %}
-    <h2>Rúbricas Calificadas</h2>
-    <table>
-        <tr>
-            <th>Nombre</th>
-            <th>Cumple</th>
-            <th>Observación</th>
-        </tr>
-        {% for rubrica in rubricas %}
-        <tr>
-            <td>{{ rubrica.nombre }}</td>
-            <td>{{ rubrica.cumple }}</td>
-            <td>{{ rubrica.observacion }}</td>
-        </tr>
-        {% endfor %}
-    </table>
-    {% endif %}
+        </ul>
+        </section>
 
-    <script>
-        const processForm = document.getElementById("process-form");
-        const progressDiv = document.getElementById("progress");
-        const progressBar = document.getElementById("progress-bar");
+        <section class="processing-section">
+        <h2 id="subT-SelecVid">Seleccionar Video para Procesar</h2>
+        <form id="processForm" action="/process-video/" method="post">
+            <select name="video_file" required>
+                {% for video in videos %}
+                    <option value="{{ video }}">{{ video }}</option>
+                {% endfor %}
+            </select>
+            <button id="processVideo" type="submit">Procesar Video</button>
+        </form>
+        </section>
 
-        // Conectar al WebSocket para recibir actualizaciones
-        const socket = new WebSocket(`ws://${window.location.host}/ws/progress`);
+        <!-- Spinner de progreso -->
+        <div id="spinner" style="display:none;">
+            <img src="/static/images/icons/spinner.svg" alt="Procesando...">
+            <p id="progressMessage">Procesando video...</p>
+        </div>
 
-        socket.onmessage = function(event) {
-            const message = event.data;
-            if (message.includes("Procesando el video")) {
-                progressDiv.style.display = "block"; // Muestra la barra de progreso
-                progressBar.style.width = "10%"; // Actualiza el progreso inicial
-                progressBar.innerText = message; // Muestra mensaje
-            } else if (message.includes("completado")) {
-                progressBar.style.width = "100%"; // Completa la barra de progreso
-                progressBar.innerText = message; // Muestra mensaje final
-            } else {
-                progressBar.innerText = message; // Muestra otros mensajes
-            }
-        };
-
-        processForm.onsubmit = function() {
-            progressBar.style.width = "0"; // Resetea la barra al enviar el formulario
-            progressBar.innerText = "0%";
-        };
-    </script>
+        <script src="/static/js/script.js"></script>
+</main>
 </body>
 </html>
