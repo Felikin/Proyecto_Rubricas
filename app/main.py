@@ -5,8 +5,6 @@ from fastapi.templating import Jinja2Templates
 from fastapi.responses import RedirectResponse
 from fastapi import Request
 import os
-import sys
-import shutil
 import asyncio
 from src.models.transcript_model import model_execution
 from src.data.preprocess import split_transcript_audio

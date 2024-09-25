@@ -28,6 +28,7 @@ MANIFEST
 models/
 data/generated/
 !src/models/
+test_rub/
 
 
 # PyInstaller

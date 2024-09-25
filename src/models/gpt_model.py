@@ -1,6 +1,5 @@
 import cv2
-import base64
-from typing import List, Dict
+from typing import Dict
 from tqdm import tqdm
 from dotenv import load_dotenv
 from src.data.load_data import load_video, initialize_gpt_client

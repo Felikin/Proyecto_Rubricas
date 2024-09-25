@@ -1,6 +1,5 @@
 import os
 import cv2
-from ultralytics import YOLO
 from moviepy.editor import VideoFileClip
 from openai import OpenAI
 from dotenv import load_dotenv
@@ -22,20 +21,6 @@ def load_video(video_path: str) -> cv2.VideoCapture:
     if not video.isOpened():
         raise ValueError(f"Error opening video file: {video_path}")
     return video
-
-
-def load_yolo_model(model_path: str) -> YOLO:
-    """
-    Carga un modelo YOLO preentrenado desde la ruta especificada.
-    
-    Args:
-    model_path (str): Ruta al modelo YOLO.
-
-    Returns:
-    YOLO: Modelo YOLO cargado.
-    """
-    return YOLO(model_path)
-
 
 def extract_audio(video_path: str) -> str:
     """
