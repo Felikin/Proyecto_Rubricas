@@ -7,3 +7,6 @@ tests/
 README.md/
 .gitignore/
 __pychache__
+!src/data/
+visualization
+data/raw
