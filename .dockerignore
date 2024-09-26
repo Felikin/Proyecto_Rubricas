@@ -3,10 +3,8 @@ test_rub/
 scripts/
 notebooks/
 tests/
-.env
 README.md/
 .gitignore/
 __pychache__
 !src/data/
 visualization
-data/raw
