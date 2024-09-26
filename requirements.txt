@@ -1,4 +1,5 @@
-fastapi==0.115.0
+fastapi[all]
+uvicorn[standard]
 langchain==0.3.1
 langchain_core==0.3.6
 langchain_openai==0.2.0

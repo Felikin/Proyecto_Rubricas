@@ -3,7 +3,6 @@ from langchain_core.output_parsers import  JsonOutputParser
 from src.prompts.object_models import Rubricas
 
 
-# Prompt para bajas económicas 
 output_parser = JsonOutputParser(pydantic_object=Rubricas)
 
 format_instructions = output_parser.get_format_instructions()
