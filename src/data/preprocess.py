@@ -31,7 +31,6 @@ def split_transcript_audio(video_path: str) -> str:
     Returns:
         str: Transcripción del archivo.
     """
-
     audio_path = extract_audio(video_path)
     client = initialize_gpt_client()
 

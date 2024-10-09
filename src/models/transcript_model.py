@@ -15,7 +15,7 @@ def model_execution(transcripcion: str) -> List[dict]:
     Returns:
         List: Lista de diccionarios con la evaluación de las rúbricas.
     """
-    
+    print("entramos al modelo de transcipción")
     llm = ChatOpenAI(
         model="gpt-4o-mini-2024-07-18",
         api_key=openai_api_key, # type:ignore
